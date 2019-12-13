@@ -1,31 +1,43 @@
 // The following function checks item off of the shopping list
 function handleComplete() {
-    $('.shopping-item-toggle').click(function(event) {
+    $('.shopping-list').on('click', '.shopping-item-toggle', function(event) {
         event.stopPropagation();
-        $(this).closest('li').find('span.shopping-item').toggleClass('shopping-item__checked');
+        $(this).closest('.shopping-item-controls').siblings('.shopping-item').toggleClass('shopping-item__checked');
     });
   };
-
-  $(handleComplete);
 
 // The following function adds items from the input field
 function submitInfo(){
-  $('form').submit(function(){
-    let value = $(this).find('#shopping-list-entry');
-    $('ul').prepend(`<li> ${value.val()} </li>`);
-    value.val("");
+  $('#js-shopping-list-form').submit(function(){
     event.preventDefault();
+    let value = $('#shopping-list-entry').val();
+    $('.shopping-list').prepend(`<li> <span class="shopping-item">${value}</span> 
+    <div class="shopping-item-controls">
+    <button class="shopping-item-toggle">
+      <span class="button-label">check</span>
+    </button>
+    <button class="shopping-item-delete">
+      <span class="button-label">delete</span>
+    </button>
+  </div> 
+  </li>`);
    });
- };
-
-  $(submitInfo);
+ }
 
 // The following function removes items from the shopping list
   function removeItem(){
-    $('.shopping-item-delete').click(function(event) {
-        event.stopPropagation();
-        $(this).closest('li').find('span.shopping-item, div.shopping-item-controls').remove();
+    $('.shopping-list').on('click', '.shopping-item-delete', function(event) {
+      $(this).closest('li').remove();
     });
   };
 
-  $(removeItem);
+  function handleShoppingList() {
+    handleComplete();
+    submitInfo();
+    removeItem();
+  }
+  
+  // when the page loads, call `handleShoppingList`
+  $(handleShoppingList);
+
+  
